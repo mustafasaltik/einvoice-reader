@@ -1,38 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Invoice {{ invoice.number }} — E-Invoice Reader{% endblock %}
+{% block title %}{{ trans.result_invoice }} {{ invoice.number }} — {{ trans.site_name }}{% endblock %}
 
 {% block content %}
 
 <div class="flex items-center justify-between mb-8">
   <h1 class="text-2xl font-bold text-gray-900">
-    {% if invoice.type_code == "381" %}Credit Note{% else %}Invoice{% endif %}
+    {% if invoice.type_code == "381" %}{{ trans.result_credit_note }}{% else %}{{ trans.result_invoice }}{% endif %}
     {{ invoice.number }}
   </h1>
-  <a href="/" class="text-sm text-blue-600 hover:underline">&#8592; Read another</a>
+  <a href="/" class="text-sm text-blue-600 hover:underline">{{ trans.result_read_another }}</a>
 </div>
 
 {# ── Summary ─────────────────────────────────────────────────────── #}
 <section class="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100 mb-8">
 
   <div class="px-5 py-4 grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-    <div><span class="text-gray-500">Syntax</span><br><strong>{{ invoice.syntax }}</strong></div>
-    <div><span class="text-gray-500">Ruleset (BT-24)</span><br><strong class="break-all">{{ invoice.customization_id }}</strong></div>
-    <div><span class="text-gray-500">Issue date (BT-2)</span><br><strong>{{ invoice.issue_date }}</strong></div>
-    <div><span class="text-gray-500">Currency (BT-5)</span><br><strong>{{ invoice.currency }}</strong></div>
+    <div><span class="text-gray-500">{{ trans.result_syntax }}</span><br><strong>{{ invoice.syntax }}</strong></div>
+    <div><span class="text-gray-500">{{ trans.result_ruleset }}</span><br><strong class="break-all">{{ invoice.customization_id }}</strong></div>
+    <div><span class="text-gray-500">{{ trans.result_issue_date }}</span><br><strong>{{ invoice.issue_date }}</strong></div>
+    <div><span class="text-gray-500">{{ trans.result_currency }}</span><br><strong>{{ invoice.currency }}</strong></div>
     {% if invoice.due_date %}
-    <div><span class="text-gray-500">Due date (BT-9)</span><br><strong>{{ invoice.due_date }}</strong></div>
+    <div><span class="text-gray-500">{{ trans.result_due_date }}</span><br><strong>{{ invoice.due_date }}</strong></div>
     {% endif %}
     {% if invoice.buyer_reference %}
-    <div><span class="text-gray-500">Buyer ref (BT-10)</span><br><strong>{{ invoice.buyer_reference }}</strong></div>
+    <div><span class="text-gray-500">{{ trans.result_buyer_ref }}</span><br><strong>{{ invoice.buyer_reference }}</strong></div>
     {% endif %}
   </div>
 
   <div class="px-5 py-4 grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
     <div>
-      <span class="text-gray-500">Seller (BT-27)</span><br>
+      <span class="text-gray-500">{{ trans.result_seller }}</span><br>
       <strong>{{ invoice.seller.name }}</strong>
-      {% if invoice.seller.vat_id %}<br><span class="text-gray-400 text-xs">VAT: {{ invoice.seller.vat_id }}</span>{% endif %}
+      {% if invoice.seller.vat_id %}<br><span class="text-gray-400 text-xs">{{ trans.result_vat_label }}: {{ invoice.seller.vat_id }}</span>{% endif %}
       {% if invoice.seller.address %}
         <br><span class="text-gray-400 text-xs">
           {{ invoice.seller.address.street or "" }}{% if invoice.seller.address.city %}, {{ invoice.seller.address.city }}{% endif %}
@@ -42,23 +42,23 @@
       {% endif %}
     </div>
     <div>
-      <span class="text-gray-500">Buyer (BT-44)</span><br>
+      <span class="text-gray-500">{{ trans.result_buyer }}</span><br>
       <strong>{{ invoice.buyer.name }}</strong>
-      {% if invoice.buyer.vat_id %}<br><span class="text-gray-400 text-xs">VAT: {{ invoice.buyer.vat_id }}</span>{% endif %}
+      {% if invoice.buyer.vat_id %}<br><span class="text-gray-400 text-xs">{{ trans.result_vat_label }}: {{ invoice.buyer.vat_id }}</span>{% endif %}
     </div>
   </div>
 
   {% if invoice.totals %}
   <div class="px-5 py-4 text-sm">
     <table class="w-full text-right">
-      <tr><td class="text-left text-gray-500">Net total (BT-106)</td><td>{{ invoice.currency }} {{ invoice.totals.line_net_total }}</td></tr>
-      {% if invoice.totals.allowances %}<tr><td class="text-left text-gray-500">Allowances (BT-107)</td><td>- {{ invoice.currency }} {{ invoice.totals.allowances }}</td></tr>{% endif %}
-      {% if invoice.totals.charges %}<tr><td class="text-left text-gray-500">Charges (BT-108)</td><td>+ {{ invoice.currency }} {{ invoice.totals.charges }}</td></tr>{% endif %}
-      <tr class="border-t border-gray-100"><td class="text-left text-gray-500">Total excl. VAT (BT-112)</td><td>{{ invoice.currency }} {{ invoice.totals.tax_exclusive }}</td></tr>
-      <tr><td class="text-left text-gray-500">VAT (BT-110)</td><td>{{ invoice.currency }} {{ invoice.totals.tax_amount }}</td></tr>
-      <tr class="font-semibold border-t border-gray-200"><td class="text-left">Total incl. VAT (BT-115)</td><td>{{ invoice.currency }} {{ invoice.totals.tax_inclusive }}</td></tr>
-      {% if invoice.totals.prepaid %}<tr><td class="text-left text-gray-500">Prepaid (BT-113)</td><td>- {{ invoice.currency }} {{ invoice.totals.prepaid }}</td></tr>{% endif %}
-      <tr class="font-bold text-blue-700"><td class="text-left">Amount due (BT-116)</td><td>{{ invoice.currency }} {{ invoice.totals.due }}</td></tr>
+      <tr><td class="text-left text-gray-500">{{ trans.result_net_total }}</td><td>{{ invoice.currency }} {{ invoice.totals.line_net_total }}</td></tr>
+      {% if invoice.totals.allowances %}<tr><td class="text-left text-gray-500">{{ trans.result_allowances }}</td><td>- {{ invoice.currency }} {{ invoice.totals.allowances }}</td></tr>{% endif %}
+      {% if invoice.totals.charges %}<tr><td class="text-left text-gray-500">{{ trans.result_charges }}</td><td>+ {{ invoice.currency }} {{ invoice.totals.charges }}</td></tr>{% endif %}
+      <tr class="border-t border-gray-100"><td class="text-left text-gray-500">{{ trans.result_excl_vat }}</td><td>{{ invoice.currency }} {{ invoice.totals.tax_exclusive }}</td></tr>
+      <tr><td class="text-left text-gray-500">{{ trans.result_vat_amount }}</td><td>{{ invoice.currency }} {{ invoice.totals.tax_amount }}</td></tr>
+      <tr class="font-semibold border-t border-gray-200"><td class="text-left">{{ trans.result_incl_vat }}</td><td>{{ invoice.currency }} {{ invoice.totals.tax_inclusive }}</td></tr>
+      {% if invoice.totals.prepaid %}<tr><td class="text-left text-gray-500">{{ trans.result_prepaid }}</td><td>- {{ invoice.currency }} {{ invoice.totals.prepaid }}</td></tr>{% endif %}
+      <tr class="font-bold text-blue-700"><td class="text-left">{{ trans.result_amount_due }}</td><td>{{ invoice.currency }} {{ invoice.totals.due }}</td></tr>
     </table>
   </div>
   {% endif %}
@@ -68,17 +68,17 @@
 {# ── Line items ───────────────────────────────────────────────────── #}
 {% if invoice.lines %}
 <section class="mb-8">
-  <h2 class="text-base font-semibold text-gray-800 mb-3">Line items</h2>
+  <h2 class="text-base font-semibold text-gray-800 mb-3">{{ trans.result_lines_heading }}</h2>
   <div class="overflow-x-auto rounded-lg border border-gray-200">
     <table class="w-full text-sm">
       <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
         <tr>
-          <th class="px-4 py-2 text-left">#</th>
-          <th class="px-4 py-2 text-left">Description</th>
-          <th class="px-4 py-2 text-right">Qty</th>
-          <th class="px-4 py-2 text-right">Unit price</th>
-          <th class="px-4 py-2 text-right">VAT</th>
-          <th class="px-4 py-2 text-right">Net</th>
+          <th class="px-4 py-2 text-left">{{ trans.result_col_id }}</th>
+          <th class="px-4 py-2 text-left">{{ trans.result_col_description }}</th>
+          <th class="px-4 py-2 text-right">{{ trans.result_col_qty }}</th>
+          <th class="px-4 py-2 text-right">{{ trans.result_col_unit_price }}</th>
+          <th class="px-4 py-2 text-right">{{ trans.result_col_vat }}</th>
+          <th class="px-4 py-2 text-right">{{ trans.result_col_net }}</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-100">
@@ -103,15 +103,23 @@
 
 {# ── Validation report ────────────────────────────────────────────── #}
 <section>
-  <h2 class="text-base font-semibold text-gray-800 mb-3">Validation report</h2>
+  <h2 class="text-base font-semibold text-gray-800 mb-3">{{ trans.result_validation_heading }}</h2>
   {% set failures = results | selectattr("passed", "equalto", false) | list %}
   {% if not failures %}
   <div class="rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-    All {{ results | length }} rules passed. This invoice appears valid.
+    {% if locale == "de" %}
+      Alle {{ results | length }} Regeln bestanden. Diese Rechnung scheint gültig zu sein.
+    {% else %}
+      All {{ results | length }} rules passed. This invoice appears valid.
+    {% endif %}
   </div>
   {% else %}
   <div class="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 mb-4">
-    {{ failures | length }} rule{{ "s" if failures | length != 1 }} failed.
+    {% if locale == "de" %}
+      {{ failures | length }} {{ "Regel" if failures | length == 1 else "Regeln" }} nicht bestanden.
+    {% else %}
+      {{ failures | length }} rule{{ "s" if failures | length != 1 }} failed.
+    {% endif %}
   </div>
   <ul class="space-y-3">
     {% for r in results %}
@@ -122,7 +130,7 @@
         <div>
           <p class="text-red-800">{{ r.rule.message[locale] }}</p>
           {% if r.detail %}<p class="mt-1 text-xs text-red-500 font-mono">{{ r.detail }}</p>{% endif %}
-          <a href="/rules/{{ r.rule.slug }}" class="mt-1 inline-block text-xs text-red-600 underline">Learn more about {{ r.rule.id }}</a>
+          <a href="/rules/{{ r.rule.slug }}" class="mt-1 inline-block text-xs text-red-600 underline">{{ trans.result_learn_more }} {{ r.rule.id }}</a>
         </div>
       </div>
     </li>
