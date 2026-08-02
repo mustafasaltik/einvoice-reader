@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Validation Rules — E-Invoice Reader{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold text-gray-900 mb-2">EN 16931 Validation Rules</h1>
+<p class="text-gray-500 mb-8">Plain-language explanations of the rules used to validate your invoice.</p>
+
+<ul class="space-y-3">
+  {% for rule in rules %}
+  <li>
+    <a href="/rules/{{ rule.slug }}"
+       class="flex items-start gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 hover:border-blue-300 transition-colors">
+      <span class="mt-0.5 shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono font-semibold text-gray-700">{{ rule.id }}</span>
+      <span class="text-sm text-gray-700">{{ rule.message["en"] }}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

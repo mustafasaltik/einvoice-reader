@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" class="h-full bg-gray-50">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}E-Invoice Reader{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2uH8H7WFAfQP8C6OkDIaqn7dpK8Oo08GqP" crossorigin="anonymous"></script>
+</head>
+<body class="h-full">
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="text-lg font-semibold text-gray-900">E-Invoice Reader</a>
+      <a href="/rules" class="text-sm text-gray-500 hover:text-gray-700">Validation rules</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-10">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="mt-16 border-t border-gray-200 py-6 text-center text-xs text-gray-400">
+    Files are parsed in memory and never stored. &nbsp;|&nbsp;
+    <a href="/rules" class="underline">Validation rules</a>
+  </footer>
+</body>
+</html>

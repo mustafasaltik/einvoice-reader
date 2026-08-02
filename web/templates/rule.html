@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ rule.id }} — E-Invoice Validation Rule{% endblock %}
+
+{% block content %}
+<a href="/rules" class="text-sm text-blue-600 hover:underline">&#8592; All rules</a>
+
+<h1 class="mt-4 text-2xl font-bold text-gray-900">{{ rule.id }}</h1>
+<span class="inline-block mt-1 rounded px-2 py-0.5 text-xs font-semibold
+  {% if rule.severity.value == 'fatal' %}bg-red-100 text-red-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">
+  {{ rule.severity.value | upper }}
+</span>
+
+<div class="mt-6 space-y-4">
+  <div class="rounded-lg bg-white border border-gray-200 px-5 py-4">
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">What this rule checks</h2>
+    <p class="text-sm text-gray-800">{{ rule.message["en"] }}</p>
+  </div>
+
+  <div class="rounded-lg bg-white border border-gray-200 px-5 py-4">
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">Auf Deutsch</h2>
+    <p class="text-sm text-gray-800">{{ rule.message["de"] }}</p>
+  </div>
+
+  <div class="rounded-lg bg-white border border-gray-200 px-5 py-4">
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">Business Terms involved</h2>
+    <div class="flex flex-wrap gap-2">
+      {% for bt in rule.bt_ids %}
+      <span class="rounded bg-blue-50 px-2 py-0.5 text-xs font-mono text-blue-700">{{ bt }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
