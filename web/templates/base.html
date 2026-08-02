@@ -4,6 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}{{ trans.site_name }}{% endblock %}</title>
+  {% block meta %}
+  <meta name="description" content="{% block description %}Free e-invoice reader for XRechnung, Peppol BIS, ZUGFeRD and Factur-X. Upload XML or PDF, get a plain-language summary and validation report instantly.{% endblock %}">
+  <link rel="canonical" href="{{ site_url }}{{ request.url.path }}">
+  {% endblock %}
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2uH8H7WFAfQP8C6OkDIaqn7dpK8Oo08GqP" crossorigin="anonymous"></script>
 </head>

@@ -10,6 +10,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "footer_privacy": "Files are parsed in memory and never stored.",
         "footer_rules": "Validation rules",
         # index
+        "index_meta_description": "Free e-invoice reader for XRechnung, Peppol BIS, ZUGFeRD and Factur-X. Upload XML or PDF — get a plain-language summary and validation report instantly, no account needed.",
+        "rules_meta_description": "Plain-language explanations of all EN 16931 validation rules used to validate XRechnung, Peppol BIS, ZUGFeRD and Factur-X invoices.",
         "index_title": "Read your e-invoice",
         "index_subtitle": (
             "Upload an XML invoice (XRechnung, Peppol BIS, NLCIUS) or a "
@@ -77,6 +79,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "footer_privacy": "Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
         "footer_rules": "Validierungsregeln",
         # index
+        "index_meta_description": "Kostenloser E-Rechnungsleser für XRechnung, Peppol BIS, ZUGFeRD und Factur-X. XML oder PDF hochladen — sofort eine verständliche Zusammenfassung und einen Validierungsbericht erhalten.",
+        "rules_meta_description": "Verständliche Erklärungen aller EN 16931-Validierungsregeln für XRechnung, Peppol BIS, ZUGFeRD und Factur-X.",
         "index_title": "Ihre E-Rechnung lesen",
         "index_subtitle": (
             "Laden Sie eine XML-Rechnung (XRechnung, Peppol BIS, NLCIUS) oder eine "
@@ -144,6 +148,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "footer_privacy": "Bestanden worden in het geheugen verwerkt en nooit opgeslagen.",
         "footer_rules": "Validatieregels",
         # index
+        "index_meta_description": "Gratis e-factuurlezer voor XRechnung, Peppol BIS, ZUGFeRD en Factur-X. Upload XML of PDF — ontvang direct een begrijpelijke samenvatting en validatierapport.",
+        "rules_meta_description": "Begrijpelijke uitleg van alle EN 16931 validatieregels voor XRechnung, Peppol BIS, ZUGFeRD en Factur-X.",
         "index_title": "Lees uw e-factuur",
         "index_subtitle": (
             "Upload een XML-factuur (XRechnung, Peppol BIS, NLCIUS) of een "

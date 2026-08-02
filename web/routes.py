@@ -6,6 +6,7 @@ from starlette.templating import _TemplateResponse
 
 from web.templating import templates
 from web.i18n import get_locale, get_trans
+from web.seo import SITE_URL
 from core.detect import Syntax, detect_syntax, extract_pdf_xml
 from core.rules import RULES, RULES_BY_ID, validate
 
@@ -133,3 +134,47 @@ async def rule_detail(request: Request, rule_id: str, lang: str | None = Query(d
     if rule is None:
         return HTMLResponse(status_code=404, content="Rule not found.")
     return _respond(request, "rule.html", {"rule": rule}, lang)
+
+
+@router.get("/robots.txt")
+async def robots_txt():
+    content = f"User-agent: *\nAllow: /\nDisallow: /analyse\nDisallow: /download\nSitemap: {SITE_URL}/sitemap.xml\n"
+    return Response(content=content, media_type="text/plain")
+
+
+@router.get("/sitemap.xml")
+async def sitemap_xml():
+    urls: list[str] = []
+
+    def url_block(loc: str, priority: str = "0.8", changefreq: str = "monthly", extra: str = "") -> str:
+        return (
+            f"  <url>\n"
+            f"    <loc>{loc}</loc>\n"
+            f"    <changefreq>{changefreq}</changefreq>\n"
+            f"    <priority>{priority}</priority>\n"
+            f"{extra}"
+            f"  </url>\n"
+        )
+
+    def hreflang_links(path: str) -> str:
+        lines = ""
+        for code in ("en", "de", "nl"):
+            lines += f'    <xhtml:link rel="alternate" hreflang="{code}" href="{SITE_URL}{path}?lang={code}"/>\n'
+        lines += f'    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}{path}"/>\n'
+        return lines
+
+    urls.append(url_block(f"{SITE_URL}/", priority="1.0", changefreq="weekly", extra=hreflang_links("/")))
+    urls.append(url_block(f"{SITE_URL}/rules", priority="0.9", changefreq="weekly", extra=hreflang_links("/rules")))
+
+    for rule in RULES:
+        path = f"/rules/{rule.slug}"
+        urls.append(url_block(f"{SITE_URL}{path}", priority="0.7", extra=hreflang_links(path)))
+
+    body = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+        '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+        + "".join(urls)
+        + "</urlset>\n"
+    )
+    return Response(content=body, media_type="application/xml")

@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ rule.id }} — E-Invoice Validation Rule{% endblock %}
+{% block title %}{{ rule.id }} — {{ rule.message[locale] | truncate(60, true, "") }} — {{ trans.site_name }}{% endblock %}
+{% block meta %}
+<meta name="description" content="{{ rule.id }}: {{ rule.message[locale] | truncate(150, true, '...') }}">
+<link rel="canonical" href="{{ site_url }}/rules/{{ rule.slug }}">
+<link rel="alternate" hreflang="en" href="{{ site_url }}/rules/{{ rule.slug }}?lang=en">
+<link rel="alternate" hreflang="de" href="{{ site_url }}/rules/{{ rule.slug }}?lang=de">
+<link rel="alternate" hreflang="nl" href="{{ site_url }}/rules/{{ rule.slug }}?lang=nl">
+<link rel="alternate" hreflang="x-default" href="{{ site_url }}/rules/{{ rule.slug }}">
+{% endblock %}
 
 {% block content %}
 <a href="/rules" class="text-sm text-blue-600 hover:underline">{{ trans.rule_back }}</a>
