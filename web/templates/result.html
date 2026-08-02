@@ -120,6 +120,8 @@
   <div class="rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
     {% if locale == "de" %}
       Alle {{ results | length }} Regeln bestanden. Diese Rechnung scheint gültig zu sein.
+    {% elif locale == "nl" %}
+      Alle {{ results | length }} regels geslaagd. Deze factuur lijkt geldig.
     {% else %}
       All {{ results | length }} rules passed. This invoice appears valid.
     {% endif %}
@@ -128,6 +130,8 @@
   <div class="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 mb-4">
     {% if locale == "de" %}
       {{ failures | length }} {{ "Regel" if failures | length == 1 else "Regeln" }} nicht bestanden.
+    {% elif locale == "nl" %}
+      {{ failures | length }} {{ "regel" if failures | length == 1 else "regels" }} niet geslaagd.
     {% else %}
       {{ failures | length }} rule{{ "s" if failures | length != 1 }} failed.
     {% endif %}

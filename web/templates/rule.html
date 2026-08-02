@@ -17,16 +17,11 @@
     <p class="text-sm text-gray-800">{{ rule.message[locale] }}</p>
   </div>
 
-  {# Always show both languages on the rule detail page — useful for bilingual users #}
-  {% if locale == "de" %}
+  {# Show the English version alongside for non-English users #}
+  {% if locale != "en" %}
   <div class="rounded-lg bg-white border border-gray-200 px-5 py-4">
-    <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">{{ trans.rule_in_english }}</h2>
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">{{ trans.rule_also_in }}</h2>
     <p class="text-sm text-gray-800">{{ rule.message["en"] }}</p>
-  </div>
-  {% else %}
-  <div class="rounded-lg bg-white border border-gray-200 px-5 py-4">
-    <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">{{ trans.rule_in_german }}</h2>
-    <p class="text-sm text-gray-800">{{ rule.message["de"] }}</p>
   </div>
   {% endif %}
 

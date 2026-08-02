@@ -18,6 +18,8 @@
            class="text-sm {% if locale == 'en' %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">EN</a>
         <a href="{{ request.url.path }}?lang=de"
            class="text-sm {% if locale == 'de' %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">DE</a>
+        <a href="{{ request.url.path }}?lang=nl"
+           class="text-sm {% if locale == 'nl' %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">NL</a>
       </div>
     </div>
   </header>

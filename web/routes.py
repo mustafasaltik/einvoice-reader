@@ -59,9 +59,7 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
             context={
                 "trans": trans,
                 "locale": locale,
-                "error": "Please upload a file or paste invoice XML."
-                if locale == "en"
-                else "Bitte laden Sie eine Datei hoch oder fuegen Sie XML ein.",
+                "error": trans["error_no_input"],
             },
         )
 
@@ -74,9 +72,7 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
             context={
                 "trans": trans,
                 "locale": locale,
-                "error": f"Could not read invoice: {exc}"
-                if locale == "en"
-                else f"Rechnung konnte nicht gelesen werden: {exc}",
+                "error": f"{trans['error_parse_prefix']} {exc}",
             },
         )
 

@@ -13,7 +13,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_title": "Read your e-invoice",
         "index_subtitle": (
             "Upload an XML invoice (XRechnung, Peppol BIS, NLCIUS) or a "
-            "ZUGFeRD / Factur-X PDF. You’ll get a plain-language summary "
+            "ZUGFeRD / Factur-X PDF. You'll get a plain-language summary "
             "and a validation report — instantly, free, no account needed."
         ),
         "index_upload_label": "Upload file",
@@ -21,6 +21,9 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_paste_label": "Paste XML",
         "index_paste_placeholder": '<?xml version="1.0" ...?>',
         "index_submit": "Read invoice",
+        # errors
+        "error_no_input": "Please upload a file or paste invoice XML.",
+        "error_parse_prefix": "Could not read invoice:",
         # result — header
         "result_invoice": "Invoice",
         "result_credit_note": "Credit Note",
@@ -35,15 +38,15 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "result_seller": "Seller (BT-27)",
         "result_buyer": "Buyer (BT-44)",
         "result_vat_label": "VAT",
-        # result — totals table
+        # result — totals table (BT numbers corrected)
         "result_net_total": "Net total (BT-106)",
         "result_allowances": "Allowances (BT-107)",
         "result_charges": "Charges (BT-108)",
-        "result_excl_vat": "Total excl. VAT (BT-112)",
+        "result_excl_vat": "Total excl. VAT (BT-109)",
         "result_vat_amount": "VAT (BT-110)",
-        "result_incl_vat": "Total incl. VAT (BT-115)",
+        "result_incl_vat": "Total incl. VAT (BT-112)",
         "result_prepaid": "Prepaid (BT-113)",
-        "result_amount_due": "Amount due (BT-116)",
+        "result_amount_due": "Amount due (BT-115)",
         # result — line items table
         "result_lines_heading": "Line items",
         "result_col_id": "#",
@@ -63,8 +66,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         # rule detail
         "rule_back": "← All rules",
         "rule_what_it_checks": "What this rule checks",
-        "rule_in_german": "Auf Deutsch",
-        "rule_in_english": "In English",
+        "rule_also_in": "Auf Deutsch",
         "rule_bt_involved": "Business Terms involved",
     },
     "de": {
@@ -77,7 +79,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_title": "Ihre E-Rechnung lesen",
         "index_subtitle": (
             "Laden Sie eine XML-Rechnung (XRechnung, Peppol BIS, NLCIUS) oder eine "
-            "ZUGFeRD / Factur-X-PDF hoch. Sie erhalten eine verständliche "
+            "ZUGFeRD / Factur-X-PDF hoch. Sie erhalten eine verständliche "
             "Zusammenfassung und einen Validierungsbericht – sofort, kostenlos, ohne Konto."
         ),
         "index_upload_label": "Datei hochladen",
@@ -85,6 +87,9 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_paste_label": "XML einfügen",
         "index_paste_placeholder": '<?xml version="1.0" ...?>',
         "index_submit": "Rechnung lesen",
+        # errors
+        "error_no_input": "Bitte laden Sie eine Datei hoch oder fügen Sie XML ein.",
+        "error_parse_prefix": "Rechnung konnte nicht gelesen werden:",
         # result — header
         "result_invoice": "Rechnung",
         "result_credit_note": "Gutschrift",
@@ -103,11 +108,11 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "result_net_total": "Nettobetrag (BT-106)",
         "result_allowances": "Nachlässe (BT-107)",
         "result_charges": "Abgaben (BT-108)",
-        "result_excl_vat": "Betrag ohne MwSt. (BT-112)",
+        "result_excl_vat": "Betrag ohne MwSt. (BT-109)",
         "result_vat_amount": "MwSt.-Betrag (BT-110)",
-        "result_incl_vat": "Betrag mit MwSt. (BT-115)",
+        "result_incl_vat": "Betrag mit MwSt. (BT-112)",
         "result_prepaid": "Bereits gezahlt (BT-113)",
-        "result_amount_due": "Fälliger Betrag (BT-116)",
+        "result_amount_due": "Fälliger Betrag (BT-115)",
         # result — line items table
         "result_lines_heading": "Rechnungspositionen",
         "result_col_id": "#",
@@ -127,14 +132,78 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         # rule detail
         "rule_back": "← Alle Regeln",
         "rule_what_it_checks": "Was diese Regel prüft",
-        "rule_in_german": "Auf Deutsch",
-        "rule_in_english": "In English",
+        "rule_also_in": "In English",
         "rule_bt_involved": "Beteiligte Geschäftsbegriffe",
+    },
+    "nl": {
+        # nav / footer
+        "site_name": "E-Factuurlezer",
+        "nav_rules": "Validatieregels",
+        "footer_privacy": "Bestanden worden in het geheugen verwerkt en nooit opgeslagen.",
+        "footer_rules": "Validatieregels",
+        # index
+        "index_title": "Lees uw e-factuur",
+        "index_subtitle": (
+            "Upload een XML-factuur (XRechnung, Peppol BIS, NLCIUS) of een "
+            "ZUGFeRD / Factur-X PDF. U ontvangt een begrijpelijke samenvatting "
+            "en een validatierapport — direct, gratis, zonder account."
+        ),
+        "index_upload_label": "Bestand uploaden",
+        "index_or": "of",
+        "index_paste_label": "XML plakken",
+        "index_paste_placeholder": '<?xml version="1.0" ...?>',
+        "index_submit": "Factuur lezen",
+        # errors
+        "error_no_input": "Upload een bestand of plak XML in.",
+        "error_parse_prefix": "Factuur kon niet worden gelezen:",
+        # result — header
+        "result_invoice": "Factuur",
+        "result_credit_note": "Creditnota",
+        "result_read_another": "← Andere factuur lezen",
+        # result — summary fields
+        "result_syntax": "Syntax",
+        "result_ruleset": "Regelset (BT-24)",
+        "result_issue_date": "Factuurdatum (BT-2)",
+        "result_currency": "Valuta (BT-5)",
+        "result_due_date": "Vervaldatum (BT-9)",
+        "result_buyer_ref": "Koperreferentie (BT-10)",
+        "result_seller": "Verkoper (BT-27)",
+        "result_buyer": "Koper (BT-44)",
+        "result_vat_label": "BTW",
+        # result — totals table
+        "result_net_total": "Nettobedrag (BT-106)",
+        "result_allowances": "Kortingen (BT-107)",
+        "result_charges": "Toeslagen (BT-108)",
+        "result_excl_vat": "Totaal excl. BTW (BT-109)",
+        "result_vat_amount": "BTW-bedrag (BT-110)",
+        "result_incl_vat": "Totaal incl. BTW (BT-112)",
+        "result_prepaid": "Reeds betaald (BT-113)",
+        "result_amount_due": "Te betalen bedrag (BT-115)",
+        # result — line items table
+        "result_lines_heading": "Factuurregels",
+        "result_col_id": "#",
+        "result_col_description": "Omschrijving",
+        "result_col_qty": "Aantal",
+        "result_col_unit_price": "Eenheidsprijs",
+        "result_col_vat": "BTW",
+        "result_col_net": "Netto",
+        # result — validation report
+        "result_validation_heading": "Validatierapport",
+        "result_learn_more": "Meer over",
+        # result — download
+        "result_download_pdf": "PDF downloaden",
+        # rules index
+        "rules_title": "EN 16931 Validatieregels",
+        "rules_subtitle": "Begrijpelijke uitleg van de regels voor het valideren van uw factuur.",
+        # rule detail
+        "rule_back": "← Alle regels",
+        "rule_what_it_checks": "Wat deze regel controleert",
+        "rule_also_in": "In English",
+        "rule_bt_involved": "Betrokken zakelijke termen",
     },
 }
 
-
-_VALID = {"en", "de"}
+_VALID = {"en", "de", "nl"}
 
 
 def get_locale(request: Request, override: str | None = None) -> str:
@@ -144,8 +213,12 @@ def get_locale(request: Request, override: str | None = None) -> str:
     cookie = request.cookies.get("lang")
     if cookie in _VALID:
         return cookie
-    accept = request.headers.get("accept-language", "")
-    return "de" if accept.lower().startswith("de") else "en"
+    accept = request.headers.get("accept-language", "").lower()
+    if accept.startswith("de"):
+        return "de"
+    if accept.startswith("nl"):
+        return "nl"
+    return "en"
 
 
 def get_trans(locale: str) -> dict[str, str]:
