@@ -21,7 +21,7 @@ def _respond(request: Request, name: str, context: dict, lang: str | None) -> _T
         name=name,
         context={"trans": get_trans(locale), "locale": locale, **context},
     )
-    if lang in ("en", "de"):
+    if lang in ("en", "de", "nl"):
         resp.set_cookie("lang", locale, **_COOKIE_OPTS)
     return resp
 
