@@ -44,8 +44,8 @@ async def index(request: Request, lang: str | None = Query(default=None)):
 
 
 @router.post("/analyse", response_class=HTMLResponse)
-async def analyse(request: Request, file: UploadFile = File(None), paste: str = Form("")):
-    locale = get_locale(request)
+async def analyse(request: Request, file: UploadFile = File(None), paste: str = Form(""), lang: str = Form("")):
+    locale = get_locale(request, lang or None)
     trans = get_trans(locale)
 
     if file and file.filename:
@@ -78,7 +78,7 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
 
     results = validate(invoice)
 
-    return templates.TemplateResponse(
+    resp = templates.TemplateResponse(
         request=request,
         name="result.html",
         context={
@@ -89,6 +89,9 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
             "raw_xml": xml_bytes.decode("utf-8", errors="replace"),
         },
     )
+    if lang in ("en", "de", "nl"):
+        resp.set_cookie("lang", locale, **_COOKIE_OPTS)
+    return resp
 
 
 @router.post("/download")
@@ -97,7 +100,7 @@ async def download(
     paste: str = Form(""),
     locale_field: str = Form("en"),
 ):
-    locale = get_locale(request, locale_field if locale_field in ("en", "de") else None)
+    locale = get_locale(request, locale_field if locale_field in ("en", "de", "nl") else None)
 
     try:
         raw = paste.strip().encode("utf-8")

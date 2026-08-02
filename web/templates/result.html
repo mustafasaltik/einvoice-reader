@@ -2,6 +2,18 @@
 
 {% block title %}{{ trans.result_invoice }} {{ invoice.number }} — {{ trans.site_name }}{% endblock %}
 
+{% block lang_switcher %}
+{% for code, label in [("en", "EN"), ("de", "DE"), ("nl", "NL")] %}
+<form method="post" action="/analyse" style="display:inline">
+  <textarea name="paste" style="display:none">{{ raw_xml }}</textarea>
+  <input type="hidden" name="lang" value="{{ code }}">
+  <button type="submit"
+    class="text-sm {% if locale == code %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">{{ label }}</button>
+</form>
+{% if not loop.last %}<span class="text-gray-200 text-sm">|</span>{% endif %}
+{% endfor %}
+{% endblock %}
+
 {% block content %}
 
 <div class="flex items-center justify-between mb-8">

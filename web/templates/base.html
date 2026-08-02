@@ -14,12 +14,14 @@
       <div class="flex items-center gap-4">
         <a href="/rules" class="text-sm text-gray-500 hover:text-gray-700">{{ trans.nav_rules }}</a>
         <span class="text-gray-200">|</span>
+        {% block lang_switcher %}
         <a href="{{ request.url.path }}?lang=en"
            class="text-sm {% if locale == 'en' %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">EN</a>
         <a href="{{ request.url.path }}?lang=de"
            class="text-sm {% if locale == 'de' %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">DE</a>
         <a href="{{ request.url.path }}?lang=nl"
            class="text-sm {% if locale == 'nl' %}font-semibold text-gray-900{% else %}text-gray-400 hover:text-gray-700{% endif %}">NL</a>
+        {% endblock %}
       </div>
     </div>
   </header>
