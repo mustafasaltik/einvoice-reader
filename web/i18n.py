@@ -55,6 +55,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         # result — validation report
         "result_validation_heading": "Validation report",
         "result_learn_more": "Learn more about",
+        # result — download
+        "result_download_pdf": "Download PDF",
         # rules index
         "rules_title": "EN 16931 Validation Rules",
         "rules_subtitle": "Plain-language explanations of the rules used to validate your invoice.",
@@ -117,6 +119,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         # result — validation report
         "result_validation_heading": "Validierungsbericht",
         "result_learn_more": "Mehr zu",
+        # result — download
+        "result_download_pdf": "PDF herunterladen",
         # rules index
         "rules_title": "EN 16931 Validierungsregeln",
         "rules_subtitle": "Verständliche Erklärungen der Regeln zur Validierung Ihrer Rechnung.",

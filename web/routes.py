@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Request, UploadFile, File, Form, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 from starlette.templating import _TemplateResponse
 
 from web.templating import templates
@@ -24,6 +24,18 @@ def _respond(request: Request, name: str, context: dict, lang: str | None) -> _T
     if lang in ("en", "de"):
         resp.set_cookie("lang", locale, **_COOKIE_OPTS)
     return resp
+
+
+def _parse_raw(raw: bytes):
+    """Detect syntax, extract XML from PDF if needed, parse to Invoice."""
+    syntax = detect_syntax(raw)
+    if raw[:4] == b"%PDF":
+        raw = extract_pdf_xml(raw)
+    if syntax == Syntax.UBL:
+        from core.parsers.ubl import parse
+    else:
+        from core.parsers.cii import parse
+    return parse(raw), raw
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -49,21 +61,12 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
                 "locale": locale,
                 "error": "Please upload a file or paste invoice XML."
                 if locale == "en"
-                else "Bitte laden Sie eine Datei hoch oder fügen Sie XML ein.",
+                else "Bitte laden Sie eine Datei hoch oder fuegen Sie XML ein.",
             },
         )
 
     try:
-        syntax = detect_syntax(raw)
-        if raw[:4] == b"%PDF":
-            raw = extract_pdf_xml(raw)
-
-        if syntax == Syntax.UBL:
-            from core.parsers.ubl import parse
-        else:
-            from core.parsers.cii import parse
-
-        invoice = parse(raw)
+        invoice, xml_bytes = _parse_raw(raw)
     except Exception as exc:
         return templates.TemplateResponse(
             request=request,
@@ -82,7 +85,41 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
     return templates.TemplateResponse(
         request=request,
         name="result.html",
-        context={"trans": trans, "locale": locale, "invoice": invoice, "results": results},
+        context={
+            "trans": trans,
+            "locale": locale,
+            "invoice": invoice,
+            "results": results,
+            "raw_xml": xml_bytes.decode("utf-8", errors="replace"),
+        },
+    )
+
+
+@router.post("/download")
+async def download(
+    request: Request,
+    paste: str = Form(""),
+    locale_field: str = Form("en"),
+):
+    locale = get_locale(request, locale_field if locale_field in ("en", "de") else None)
+
+    try:
+        raw = paste.strip().encode("utf-8")
+        invoice, _ = _parse_raw(raw)
+    except Exception as exc:
+        return HTMLResponse(
+            status_code=400,
+            content=f"Could not generate PDF: {exc}",
+        )
+
+    from core.pdf import build
+    pdf_bytes = build(invoice, locale=locale)
+
+    filename = f"invoice-{invoice.number or 'download'}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
 
