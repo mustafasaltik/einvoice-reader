@@ -17,6 +17,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
             "and a validation report — instantly, free, no account needed."
         ),
         "index_upload_label": "Upload file",
+        "index_no_file": "No file chosen",
         "index_or": "or",
         "index_paste_label": "Paste XML",
         "index_paste_placeholder": '<?xml version="1.0" ...?>',
@@ -83,6 +84,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
             "Zusammenfassung und einen Validierungsbericht – sofort, kostenlos, ohne Konto."
         ),
         "index_upload_label": "Datei hochladen",
+        "index_no_file": "Keine Datei ausgewählt",
         "index_or": "oder",
         "index_paste_label": "XML einfügen",
         "index_paste_placeholder": '<?xml version="1.0" ...?>',
@@ -149,6 +151,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
             "en een validatierapport — direct, gratis, zonder account."
         ),
         "index_upload_label": "Bestand uploaden",
+        "index_no_file": "Geen bestand gekozen",
         "index_or": "of",
         "index_paste_label": "XML plakken",
         "index_paste_placeholder": '<?xml version="1.0" ...?>',
