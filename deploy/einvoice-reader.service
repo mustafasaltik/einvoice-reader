@@ -1,0 +1,15 @@
+[Unit]
+Description=E-Invoice Reader
+After=network.target
+
+[Service]
+User=einvoice
+Group=einvoice
+WorkingDirectory=/home/einvoice/einvoice-reader
+Environment="SITE_URL=https://einvoice-reader.com"
+ExecStart=/home/einvoice/einvoice-reader/.venv/bin/uvicorn web.app:create_app --factory --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
