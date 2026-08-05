@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from enum import Enum
 
+from core.exceptions import NoPdfAttachmentError, UnknownFormatError
+
 
 class Syntax(str, Enum):
     UBL = "UBL"
@@ -35,7 +37,7 @@ def detect_syntax(raw: bytes) -> Syntax:
         # string is sufficient for detection.
         if any(ns in raw for ns in _CII_NAMESPACES):
             return Syntax.CII
-        raise ValueError("PDF does not appear to contain a recognised e-invoice attachment")
+        raise NoPdfAttachmentError()
 
     for ns in _UBL_NAMESPACES:
         if ns in raw:
@@ -45,7 +47,7 @@ def detect_syntax(raw: bytes) -> Syntax:
         if ns in raw:
             return Syntax.CII
 
-    raise ValueError("Cannot determine e-invoice syntax: no recognised namespace found")
+    raise UnknownFormatError()
 
 
 def extract_pdf_xml(raw: bytes) -> bytes:
@@ -71,4 +73,4 @@ def extract_pdf_xml(raw: bytes) -> bytes:
             obj = ref.get_object()
             return obj["/EF"]["/F"].get_data()
 
-    raise ValueError("No recognised XML attachment found in PDF")
+    raise NoPdfAttachmentError()

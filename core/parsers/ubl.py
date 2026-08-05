@@ -5,6 +5,7 @@ from decimal import Decimal
 
 from lxml import etree
 
+from core.exceptions import MalformedXmlError, ParseError
 from core.model import Address, Invoice, Line, Party, Totals, VatBreakdown
 
 _NS = {
@@ -23,7 +24,17 @@ _PARSER = etree.XMLParser(
 
 def parse(raw: bytes) -> Invoice:
     """Parse a UBL Invoice or CreditNote XML document into an Invoice."""
-    root = etree.fromstring(raw, parser=_PARSER)
+    try:
+        root = etree.fromstring(raw, parser=_PARSER)
+    except etree.XMLSyntaxError as exc:
+        raise MalformedXmlError() from exc
+    try:
+        return _parse(root)
+    except (KeyError, IndexError, AttributeError, ValueError) as exc:
+        raise ParseError() from exc
+
+
+def _parse(root: etree._Element) -> Invoice:
     tag = etree.QName(root.tag).localname
     is_credit_note = tag == "CreditNote"
 

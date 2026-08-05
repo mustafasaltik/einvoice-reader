@@ -26,6 +26,11 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_submit": "Read invoice",
         # errors
         "error_no_input": "Please upload a file or paste invoice XML.",
+        "error_unknown_format": "This file doesn't look like an e-invoice. Please upload an XRechnung, Peppol BIS, ZUGFeRD or Factur-X file (XML or PDF).",
+        "error_no_pdf_attachment": "This PDF doesn't contain an embedded XML invoice. Only ZUGFeRD and Factur-X PDFs are supported — a regular PDF is not an e-invoice.",
+        "error_malformed_xml": "The XML file appears to be corrupted or incomplete and could not be read.",
+        "error_parse_failed": "The file was recognised as an e-invoice format but required fields could not be extracted. The file may not conform to EN 16931.",
+        "error_unexpected": "Something went wrong reading the invoice. Please try a different file.",
         "error_parse_prefix": "Could not read invoice:",
         # result — header
         "result_invoice": "Invoice",
@@ -95,6 +100,11 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_submit": "Rechnung lesen",
         # errors
         "error_no_input": "Bitte laden Sie eine Datei hoch oder fügen Sie XML ein.",
+        "error_unknown_format": "Diese Datei sieht nicht wie eine E-Rechnung aus. Bitte laden Sie eine XRechnung, Peppol BIS, ZUGFeRD oder Factur-X Datei hoch (XML oder PDF).",
+        "error_no_pdf_attachment": "Dieses PDF enthält keine eingebettete XML-Rechnung. Nur ZUGFeRD- und Factur-X-PDFs werden unterstützt – ein normales PDF ist keine E-Rechnung.",
+        "error_malformed_xml": "Die XML-Datei scheint beschädigt oder unvollständig zu sein und konnte nicht gelesen werden.",
+        "error_parse_failed": "Die Datei wurde als E-Rechnungsformat erkannt, aber erforderliche Felder konnten nicht extrahiert werden. Die Datei entspricht möglicherweise nicht EN 16931.",
+        "error_unexpected": "Beim Lesen der Rechnung ist ein Fehler aufgetreten. Bitte versuchen Sie es mit einer anderen Datei.",
         "error_parse_prefix": "Rechnung konnte nicht gelesen werden:",
         # result — header
         "result_invoice": "Rechnung",
@@ -164,6 +174,11 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "index_submit": "Factuur lezen",
         # errors
         "error_no_input": "Upload een bestand of plak XML in.",
+        "error_unknown_format": "Dit bestand ziet er niet uit als een e-factuur. Upload een XRechnung, Peppol BIS, ZUGFeRD of Factur-X bestand (XML of PDF).",
+        "error_no_pdf_attachment": "Deze PDF bevat geen ingebedde XML-factuur. Alleen ZUGFeRD- en Factur-X-PDF's worden ondersteund — een gewone PDF is geen e-factuur.",
+        "error_malformed_xml": "Het XML-bestand lijkt beschadigd of onvolledig en kon niet worden gelezen.",
+        "error_parse_failed": "Het bestand werd herkend als e-factuurformaat, maar vereiste velden konden niet worden uitgelezen. Het bestand voldoet mogelijk niet aan EN 16931.",
+        "error_unexpected": "Er is iets misgegaan bij het lezen van de factuur. Probeer een ander bestand.",
         "error_parse_prefix": "Factuur kon niet worden gelezen:",
         # result — header
         "result_invoice": "Factuur",

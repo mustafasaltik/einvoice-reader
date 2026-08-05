@@ -8,6 +8,7 @@ from web.templating import templates
 from web.i18n import get_locale, get_trans
 from web.seo import SITE_URL
 from core.detect import Syntax, detect_syntax, extract_pdf_xml
+from core.exceptions import InvoiceReadError, MalformedXmlError, NoPdfAttachmentError, ParseError, UnknownFormatError
 from core.rules import RULES, RULES_BY_ID, validate
 
 router = APIRouter()
@@ -66,15 +67,24 @@ async def analyse(request: Request, file: UploadFile = File(None), paste: str = 
 
     try:
         invoice, xml_bytes = _parse_raw(raw)
-    except Exception as exc:
+    except UnknownFormatError:
+        error = trans["error_unknown_format"]
+    except NoPdfAttachmentError:
+        error = trans["error_no_pdf_attachment"]
+    except MalformedXmlError:
+        error = trans["error_malformed_xml"]
+    except ParseError:
+        error = trans["error_parse_failed"]
+    except Exception:
+        error = trans["error_unexpected"]
+    else:
+        error = None
+
+    if error:
         return templates.TemplateResponse(
             request=request,
             name="index.html",
-            context={
-                "trans": trans,
-                "locale": locale,
-                "error": f"{trans['error_parse_prefix']} {exc}",
-            },
+            context={"trans": trans, "locale": locale, "error": error},
         )
 
     results = validate(invoice)
