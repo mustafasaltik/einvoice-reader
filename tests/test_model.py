@@ -5,6 +5,8 @@ from decimal import Decimal
 import pytest
 
 from core.model import Address, Invoice, Line, Party, Totals, VatBreakdown
+
+_SELLER_ADDRESS = Address(street="Musterstraße 1", city="Berlin", postcode="10115", country="DE")
 from core.rules import validate
 
 
@@ -21,7 +23,7 @@ def _make_invoice(**overrides) -> Invoice:
         buyer_reference="buyer-ref-1",
         purchase_order_ref=None,
         note=None,
-        seller=Party(name="Seller GmbH", vat_id="DE123456789", tax_reg_id=None, address=None),
+        seller=Party(name="Seller GmbH", vat_id="DE123456789", tax_reg_id=None, address=_SELLER_ADDRESS),
         buyer=Party(name="Buyer GmbH", vat_id="DE987654321", tax_reg_id=None, address=None),
         lines=[
             Line(
@@ -260,6 +262,136 @@ def test_br_co_13_catches_wrong_s_category_vat():
     results = validate(invoice)
     failed_ids = {r.rule.id for r in results if not r.passed}
     assert "BR-CO-13" in failed_ids
+
+
+def test_missing_seller_address_fails_br09():
+    invoice = _make_invoice(
+        seller=Party(name="Seller GmbH", vat_id="DE123456789", tax_reg_id=None, address=None)
+    )
+    results = validate(invoice)
+    failed_ids = {r.rule.id for r in results if not r.passed}
+    assert "BR-09" in failed_ids
+
+
+def test_missing_seller_country_fails_br10():
+    invoice = _make_invoice(
+        seller=Party(name="Seller GmbH", vat_id="DE123456789", tax_reg_id=None,
+                     address=Address(street="Musterstraße 1", city="Berlin", postcode="10115", country=""))
+    )
+    results = validate(invoice)
+    failed_ids = {r.rule.id for r in results if not r.passed}
+    assert "BR-10" in failed_ids
+
+
+def _make_exempt_invoice(**overrides):
+    """Invoice with E-category VAT (exempt), tax amount and rate = 0."""
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("0"),
+        category_code="E", rate=Decimal("0"),
+        exemption_reason="Steuerbefreiung nach §4", exemption_reason_code="VATEX-EU-AE",
+    )]
+    totals = Totals(
+        line_net_total=Decimal("200.00"), allowances=Decimal("0"), charges=Decimal("0"),
+        tax_exclusive=Decimal("200.00"), tax_amount=Decimal("0"),
+        tax_inclusive=Decimal("200.00"), prepaid=Decimal("0"), rounding=Decimal("0"),
+        due=Decimal("200.00"),
+    )
+    line = Line(id="1", note=None, quantity=Decimal("1"), unit="EA",
+                net_amount=Decimal("200.00"), item_name="Service", item_description=None,
+                vat_category="E", vat_rate=Decimal("0"), unit_price=Decimal("200.00"),
+                gross_price=None, buyer_accounting_ref=None)
+    defaults = dict(vat_breakdown=vat_breakdown, totals=totals, lines=[line])
+    defaults.update(overrides)
+    return _make_invoice(**defaults)
+
+
+def test_valid_exempt_invoice_passes():
+    invoice = _make_exempt_invoice()
+    results = validate(invoice)
+    failures = [r for r in results if not r.passed]
+    assert not failures, [r.detail for r in failures]
+
+
+def test_br_e_06_catches_nonzero_vat_amount():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("10.00"),  # wrong
+        category_code="E", rate=Decimal("0"),
+        exemption_reason="some reason", exemption_reason_code=None,
+    )]
+    invoice = _make_exempt_invoice(vat_breakdown=vat_breakdown)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-E-06" in failed_ids
+
+
+def test_br_e_07_catches_nonzero_rate():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("0"),
+        category_code="E", rate=Decimal("19"),  # wrong
+        exemption_reason="some reason", exemption_reason_code=None,
+    )]
+    invoice = _make_exempt_invoice(vat_breakdown=vat_breakdown)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-E-07" in failed_ids
+
+
+def test_br_e_08_catches_missing_exemption_reason():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("0"),
+        category_code="E", rate=Decimal("0"),
+        exemption_reason=None, exemption_reason_code=None,  # wrong
+    )]
+    invoice = _make_exempt_invoice(vat_breakdown=vat_breakdown)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-E-08" in failed_ids
+
+
+def test_br_g_06_catches_nonzero_vat_amount():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("5.00"),  # wrong
+        category_code="G", rate=Decimal("0"), exemption_reason=None, exemption_reason_code=None,
+    )]
+    totals = Totals(Decimal("200.00"), Decimal("0"), Decimal("0"), Decimal("200.00"),
+                    Decimal("5.00"), Decimal("205.00"), Decimal("0"), Decimal("0"), Decimal("205.00"))
+    invoice = _make_invoice(vat_breakdown=vat_breakdown, totals=totals)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-G-06" in failed_ids
+
+
+def test_br_z_06_catches_nonzero_vat_amount():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("5.00"),  # wrong
+        category_code="Z", rate=Decimal("0"), exemption_reason=None, exemption_reason_code=None,
+    )]
+    totals = Totals(Decimal("200.00"), Decimal("0"), Decimal("0"), Decimal("200.00"),
+                    Decimal("5.00"), Decimal("205.00"), Decimal("0"), Decimal("0"), Decimal("205.00"))
+    invoice = _make_invoice(vat_breakdown=vat_breakdown, totals=totals)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-Z-06" in failed_ids
+
+
+def test_br_o_06_catches_nonzero_vat_amount():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("5.00"),  # wrong
+        category_code="O", rate=None, exemption_reason=None, exemption_reason_code=None,
+    )]
+    totals = Totals(Decimal("200.00"), Decimal("0"), Decimal("0"), Decimal("200.00"),
+                    Decimal("5.00"), Decimal("205.00"), Decimal("0"), Decimal("0"), Decimal("205.00"))
+    invoice = _make_invoice(vat_breakdown=vat_breakdown, totals=totals)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-O-06" in failed_ids
+
+
+def test_br_o_07_catches_rate_present():
+    vat_breakdown = [VatBreakdown(
+        taxable_amount=Decimal("200.00"), tax_amount=Decimal("0"),
+        category_code="O", rate=Decimal("0"),  # wrong — O must have no rate
+        exemption_reason=None, exemption_reason_code=None,
+    )]
+    totals = Totals(Decimal("200.00"), Decimal("0"), Decimal("0"), Decimal("200.00"),
+                    Decimal("0"), Decimal("200.00"), Decimal("0"), Decimal("0"), Decimal("200.00"))
+    invoice = _make_invoice(vat_breakdown=vat_breakdown, totals=totals)
+    failed_ids = {r.rule.id for r in validate(invoice) if not r.passed}
+    assert "BR-O-07" in failed_ids
 
 
 def test_br_co_17_catches_wrong_amount_due():

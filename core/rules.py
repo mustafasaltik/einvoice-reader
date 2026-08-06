@@ -115,6 +115,26 @@ RULES: list[Rule] = [
         },
     ),
     Rule(
+        id="BR-09",
+        severity=Severity.FATAL,
+        bt_ids=("BG-5",),
+        message={
+            "en": "The seller must have a postal address (BG-5).",
+            "de": "Der Verkäufer muss eine Postanschrift (BG-5) angeben.",
+            "nl": "De verkoper moet een postadres (BG-5) opgeven.",
+        },
+    ),
+    Rule(
+        id="BR-10",
+        severity=Severity.FATAL,
+        bt_ids=("BT-40",),
+        message={
+            "en": "The seller postal address must contain a country code (BT-40).",
+            "de": "Die Postanschrift des Verkäufers muss einen Ländercode enthalten (BT-40).",
+            "nl": "Het postadres van de verkoper moet een landcode bevatten (BT-40).",
+        },
+    ),
+    Rule(
         id="BR-16",
         severity=Severity.FATAL,
         bt_ids=("BG-25",),
@@ -143,6 +163,109 @@ RULES: list[Rule] = [
             "en": "Each invoice line must contain a VAT category code (BT-151).",
             "de": "Jede Rechnungsposition muss einen MwSt.-Kategoriecode (BT-151) enthalten.",
             "nl": "Elke factuurregel moet een BTW-categoriecode (BT-151) bevatten.",
+        },
+    ),
+    # ── VAT category E — Exempt from VAT ────────────────────────────────
+    Rule(
+        id="BR-E-06",
+        severity=Severity.FATAL,
+        bt_ids=("BT-117",),
+        message={
+            "en": "In a VAT breakdown with category code 'E' (exempt), the VAT amount (BT-117) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'E' (befreit) muss der MwSt.-Betrag (BT-117) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'E' (vrijgesteld) moet het BTW-bedrag (BT-117) nul zijn.",
+        },
+    ),
+    Rule(
+        id="BR-E-07",
+        severity=Severity.FATAL,
+        bt_ids=("BT-119",),
+        message={
+            "en": "In a VAT breakdown with category code 'E' (exempt), the VAT rate (BT-119) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'E' (befreit) muss der MwSt.-Satz (BT-119) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'E' (vrijgesteld) moet het BTW-tarief (BT-119) nul zijn.",
+        },
+    ),
+    Rule(
+        id="BR-E-08",
+        severity=Severity.FATAL,
+        bt_ids=("BT-120", "BT-121"),
+        message={
+            "en": (
+                "In a VAT breakdown with category code 'E' (exempt), "
+                "an exemption reason (BT-120) or exemption reason code (BT-121) must be provided."
+            ),
+            "de": (
+                "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'E' (befreit) muss "
+                "ein Befreiungsgrund (BT-120) oder ein Befreiungsgrundcode (BT-121) angegeben werden."
+            ),
+            "nl": (
+                "In een BTW-uitsplitsing met categoriecode 'E' (vrijgesteld) moet "
+                "een vrijstellingsreden (BT-120) of vrijstellingsredencode (BT-121) worden opgegeven."
+            ),
+        },
+    ),
+    # ── VAT category G — Zero-rated (export outside EU) ─────────────────
+    Rule(
+        id="BR-G-06",
+        severity=Severity.FATAL,
+        bt_ids=("BT-117",),
+        message={
+            "en": "In a VAT breakdown with category code 'G' (zero-rated export), the VAT amount (BT-117) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'G' (steuerfreier Export) muss der MwSt.-Betrag (BT-117) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'G' (nultarief export) moet het BTW-bedrag (BT-117) nul zijn.",
+        },
+    ),
+    Rule(
+        id="BR-G-07",
+        severity=Severity.FATAL,
+        bt_ids=("BT-119",),
+        message={
+            "en": "In a VAT breakdown with category code 'G' (zero-rated export), the VAT rate (BT-119) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'G' (steuerfreier Export) muss der MwSt.-Satz (BT-119) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'G' (nultarief export) moet het BTW-tarief (BT-119) nul zijn.",
+        },
+    ),
+    # ── VAT category Z — Zero-rated (domestic) ───────────────────────────
+    Rule(
+        id="BR-Z-06",
+        severity=Severity.FATAL,
+        bt_ids=("BT-117",),
+        message={
+            "en": "In a VAT breakdown with category code 'Z' (zero-rated), the VAT amount (BT-117) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'Z' (Nullsatz) muss der MwSt.-Betrag (BT-117) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'Z' (nultarief) moet het BTW-bedrag (BT-117) nul zijn.",
+        },
+    ),
+    Rule(
+        id="BR-Z-07",
+        severity=Severity.FATAL,
+        bt_ids=("BT-119",),
+        message={
+            "en": "In a VAT breakdown with category code 'Z' (zero-rated), the VAT rate (BT-119) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'Z' (Nullsatz) muss der MwSt.-Satz (BT-119) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'Z' (nultarief) moet het BTW-tarief (BT-119) nul zijn.",
+        },
+    ),
+    # ── VAT category O — Outside VAT scope ──────────────────────────────
+    Rule(
+        id="BR-O-06",
+        severity=Severity.FATAL,
+        bt_ids=("BT-117",),
+        message={
+            "en": "In a VAT breakdown with category code 'O' (outside VAT scope), the VAT amount (BT-117) must be zero.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'O' (außerhalb des MwSt.-Anwendungsbereichs) muss der MwSt.-Betrag (BT-117) null sein.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'O' (buiten BTW-toepassingsgebied) moet het BTW-bedrag (BT-117) nul zijn.",
+        },
+    ),
+    Rule(
+        id="BR-O-07",
+        severity=Severity.FATAL,
+        bt_ids=("BT-119",),
+        message={
+            "en": "In a VAT breakdown with category code 'O' (outside VAT scope), no VAT rate (BT-119) shall be provided.",
+            "de": "In einer MwSt.-Aufschlüsselung mit Kategoriecode 'O' (außerhalb des MwSt.-Anwendungsbereichs) darf kein MwSt.-Satz (BT-119) angegeben werden.",
+            "nl": "In een BTW-uitsplitsing met categoriecode 'O' (buiten BTW-toepassingsgebied) mag geen BTW-tarief (BT-119) worden opgegeven.",
         },
     ),
     # ── Document-level arithmetic ────────────────────────────────────────
@@ -337,6 +460,16 @@ def _check_br08(inv) -> str | None:
     return "Seller must have a VAT identifier (BT-31) or tax registration identifier (BT-32)."
 
 
+def _check_br09(inv) -> str | None:
+    return None if inv.seller.address is not None else "Seller postal address (BG-5) is missing."
+
+
+def _check_br10(inv) -> str | None:
+    if inv.seller.address is None:
+        return "Seller postal address (BG-5) is missing."
+    return None if (inv.seller.address.country and inv.seller.address.country.strip()) else "Seller country code (BT-40) is missing."
+
+
 def _check_br16(inv) -> str | None:
     return None if inv.lines else "Invoice must contain at least one line (BG-25)."
 
@@ -349,6 +482,51 @@ def _check_br32(inv) -> str | None:
 def _check_br33(inv) -> str | None:
     bad = [ln.id for ln in inv.lines if not (ln.vat_category and ln.vat_category.strip())]
     return f"Lines missing VAT category code (BT-151): {', '.join(bad)}." if bad else None
+
+
+def _check_br_e_06(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "E" and vb.tax_amount != Decimal("0")]
+    return f"E-category VAT breakdown(s) have non-zero BT-117: {[str(b.tax_amount) for b in bad]}." if bad else None
+
+
+def _check_br_e_07(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "E" and (vb.rate is None or vb.rate != Decimal("0"))]
+    return f"E-category VAT breakdown(s) have non-zero BT-119: {[str(b.rate) for b in bad]}." if bad else None
+
+
+def _check_br_e_08(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "E" and not (vb.exemption_reason or vb.exemption_reason_code)]
+    return "E-category VAT breakdown(s) missing exemption reason (BT-120) and code (BT-121)." if bad else None
+
+
+def _check_br_g_06(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "G" and vb.tax_amount != Decimal("0")]
+    return f"G-category VAT breakdown(s) have non-zero BT-117: {[str(b.tax_amount) for b in bad]}." if bad else None
+
+
+def _check_br_g_07(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "G" and (vb.rate is None or vb.rate != Decimal("0"))]
+    return f"G-category VAT breakdown(s) have non-zero BT-119: {[str(b.rate) for b in bad]}." if bad else None
+
+
+def _check_br_z_06(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "Z" and vb.tax_amount != Decimal("0")]
+    return f"Z-category VAT breakdown(s) have non-zero BT-117: {[str(b.tax_amount) for b in bad]}." if bad else None
+
+
+def _check_br_z_07(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "Z" and (vb.rate is None or vb.rate != Decimal("0"))]
+    return f"Z-category VAT breakdown(s) have non-zero BT-119: {[str(b.rate) for b in bad]}." if bad else None
+
+
+def _check_br_o_06(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "O" and vb.tax_amount != Decimal("0")]
+    return f"O-category VAT breakdown(s) have non-zero BT-117: {[str(b.tax_amount) for b in bad]}." if bad else None
+
+
+def _check_br_o_07(inv) -> str | None:
+    bad = [vb for vb in inv.vat_breakdown if vb.category_code == "O" and vb.rate is not None]
+    return f"O-category VAT breakdown(s) must not have a rate (BT-119): {[str(b.rate) for b in bad]}." if bad else None
 
 
 def _check_br_co_10(inv) -> str | None:
@@ -439,7 +617,18 @@ _CHECKS: dict[str, object] = {
     "BR-06":    _check_br06,
     "BR-07":    _check_br07,
     "BR-08":    _check_br08,
+    "BR-09":    _check_br09,
+    "BR-10":    _check_br10,
     "BR-16":    _check_br16,
+    "BR-E-06":  _check_br_e_06,
+    "BR-E-07":  _check_br_e_07,
+    "BR-E-08":  _check_br_e_08,
+    "BR-G-06":  _check_br_g_06,
+    "BR-G-07":  _check_br_g_07,
+    "BR-Z-06":  _check_br_z_06,
+    "BR-Z-07":  _check_br_z_07,
+    "BR-O-06":  _check_br_o_06,
+    "BR-O-07":  _check_br_o_07,
     "BR-32":    _check_br32,
     "BR-33":    _check_br33,
     "BR-CO-10": _check_br_co_10,
